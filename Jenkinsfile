@@ -31,5 +31,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Port Forwarding') {
+            steps {
+                script {
+                    try {
+                        sh "kubectl port-forward svc/wp1-wordpress 8080:80 --kubeconfig=\"${WORKSPACE}/kubeconfig.yaml\""
+                    } catch (Exception e) {
+                        error "Error setting up port forwarding: ${e.message}"
+                    }
+                }
+            }
+        }
     }
 }
