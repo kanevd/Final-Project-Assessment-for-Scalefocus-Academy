@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: 'main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/kanevd/Final-Project-Assessment-for-Scalefocus-Academy.git']]])
+                git 'https://github.com/kanevd/Final-Project-Assessment-for-Scalefocus-Academy.git'
             }
         }
 
@@ -12,10 +12,9 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat 'kubectl create namespace wp --kubeconfig="C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\NamespaceWordPress\\kubeconfig.yaml"'
-                        echo "Namespace 'wp' created."
+                        sh "kubectl create namespace wp --kubeconfig=\"${WORKSPACE}/kubeconfig.yaml\""
                     } catch (Exception e) {
-                        echo "Error creating the 'wp' namespace: ${e.getMessage()}"
+                        echo "Namespace 'wp' already exists, skipping..."
                     }
                 }
             }
@@ -25,10 +24,9 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat 'helm install final-project-wp-scalefocus stable/wordpress -n wp --kubeconfig="C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\NamespaceWordPress\\kubeconfig.yaml" --set wordpressUsername=admin,wordpressPassword=password,wordpressEmail=admin@example.com,persistence.enabled=true,persistence.storageClass=standard,persistence.accessMode=ReadWriteOnce'
-                        echo "WordPress deployed."
+                        sh "helm install final-project-wp-scalefocus stable/wordpress -n wp --kubeconfig=\"${WORKSPACE}/kubeconfig.yaml\" --set wordpressUsername=admin,wordpressPassword=password,wordpressEmail=admin@example.com,persistence.enabled=true,persistence.storageClass=standard,persistence.accessMode=ReadWriteOnce"
                     } catch (Exception e) {
-                        echo "Error deploying WordPress: ${e.getMessage()}"
+                        error "Error deploying WordPress: ${e.message}"
                     }
                 }
             }
