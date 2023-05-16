@@ -115,3 +115,5 @@ Requirement for the Project Assessment:
     }
 }
 ```
+5. Deploy the helm chart using the Jenkins pipeline.
+6. Load the home page of the WordPress to see the final result. 
