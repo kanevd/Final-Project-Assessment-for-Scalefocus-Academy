@@ -2,17 +2,11 @@ pipeline {
   agent any
 
   stages {
-    stage('Clone Repository') {
-      steps {
-        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/kanevd/Final-Project-Assessment-for-Scalefocus-Academy.git']]])
-      }
-    }
-
     stage('Namespace Check') {
       steps {
         script {
           try {
-            def nsExists = sh(
+            def nsExists = bat(
               returnStatus: true,
               script: 'kubectl get namespace wp'
             )
@@ -20,7 +14,7 @@ pipeline {
               echo "Namespace wp already exists"
             } else {
               echo "Creating namespace wp"
-              sh 'kubectl create namespace wp'
+              bat 'kubectl create namespace wp'
             }
           } catch (Exception e) {
             echo "Error checking/creating namespace wp: ${e.getMessage()}"
@@ -33,8 +27,8 @@ pipeline {
       steps {
         script {
           try {
-            sh 'helm dependency build bitnami/wordpress'
-            def chartExists = sh(
+            bat 'helm dependency build bitnami/wordpress'
+            def chartExists = bat(
               returnStatus: true,
               script: 'helm list -q wp --namespace wp'
             )
@@ -42,7 +36,7 @@ pipeline {
               echo "Chart wp already exists"
             } else {
               echo "Installing chart wp"
-              sh 'helm install wp bitnami/wordpress --namespace wp -f bitnami/wordpress/values.yaml --set service.type=ClusterIP'
+              bat 'start /B cmd /C "helm install wp bitnami/wordpress --namespace wp -f bitnami/wordpress/values.yaml --set service.type=ClusterIP"'
             }
           } catch (Exception e) {
             echo "Error installing Helm chart: ${e.getMessage()}"
