@@ -6,7 +6,7 @@ pipeline {
       steps {
         script {
           try {
-            def nsExists = sh(
+            def nsExists = bat(
               returnStatus: true,
               script: 'kubectl get namespace wp'
             )
@@ -14,13 +14,7 @@ pipeline {
               echo "Namespace wp already exists"
             } else {
               echo "Creating namespace wp"
-              writeFile file: 'namespace.yaml', text: '''
-              apiVersion: v1
-              kind: Namespace
-              metadata:
-                name: wp
-              '''
-              sh 'kubectl apply -f namespace.yaml'
+              bat 'kubectl create namespace wp'
             }
           } catch (Exception e) {
             echo "Error checking/creating namespace wp: ${e.getMessage()}"
@@ -29,12 +23,12 @@ pipeline {
       }
     }
 
-    stage('Helm Install') {
+    stage('final-project-wp-scalefocus') {
       steps {
         script {
           try {
-            sh 'helm dependency build bitnami/wordpress'
-            def chartExists = sh(
+            bat 'helm dependency build bitnami/wordpress'
+            def chartExists = bat(
               returnStatus: true,
               script: 'helm list -q wp --namespace wp'
             )
@@ -42,7 +36,7 @@ pipeline {
               echo "Chart wp already exists"
             } else {
               echo "Installing chart wp"
-              sh 'helm install wp bitnami/wordpress --namespace wp -f bitnami/wordpress/values.yaml --set service.type=ClusterIP'
+              bat 'helm install wp bitnami/wordpress --namespace wp -f bitnami/wordpress/values.yaml --set service.type=ClusterIP'
             }
           } catch (Exception e) {
             echo "Error installing Helm chart: ${e.getMessage()}"
