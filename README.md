@@ -108,7 +108,7 @@ Deploy a WordPress on Kubernetes (using Minicube) with Helm and automation with 
  pipeline {
     agent any
 
-        stage('Helm Deployment') {
+        stage('final-project-wp-scalefocus') {
             steps {
                 script {
                     bat 'helm upgrade final-project-wp-scalefocus bitnami/wordpress --kubeconfig="C:\\ProgramData\\Jenkins\\.jenkins\\kubeconfig.yaml" --namespace wp'
