@@ -6,6 +6,12 @@ pipeline {
    }
 
    stages {
+      stage('Preparation') {
+         steps {
+            git branch: 'main', url: 'https://github.com/kanevd/Final-Project-Assessment-for-Scalefocus-Academy.git'
+         }
+      }
+
       stage('Namespace') {
          steps {
             script {
