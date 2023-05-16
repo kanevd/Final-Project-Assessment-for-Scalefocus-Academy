@@ -61,9 +61,12 @@ Deploy a WordPress on Kubernetes (using Minicube) with Helm and automation with 
     }
 }
 ```
+
 - Successful build:
+
 ![](images/pipelinesucces.PNG)
 - The console output:
+
 ![](images/successoutput.PNG)
 
 - To check if WordPress exists, if it doesn’t then it installs the chart, this is the script I used:
