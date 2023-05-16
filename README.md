@@ -101,7 +101,7 @@ Deploy a WordPress on Kubernetes (using Minicube) with Helm and automation with 
     }
 }
 ```
-- Which actually failed with an error message pointing that "'helm' is not recognized as an internal or external command, operable program or batch file." Which I was currently to fix - the helm path is added in the Environment Variables -> System variables section, everything restarted, still no success. It shows the version however:
+- Which actually failed with an error message pointing that "'helm' is not recognized as an internal or external command, operable program or batch file." Which I was unable to fix - the helm path is added in the Environment Variables -> System variables section, everything restarted, dependency updated, still no success. It shows the version however:
 
 ![](images/helmversion.PNG)
 
@@ -138,3 +138,7 @@ Deploy a WordPress on Kubernetes (using Minicube) with Helm and automation with 
 
 6. Load the home page of the WordPress to see the final result.
 - The final result would be similar to the sample login page from above.
+
+---
+
+### Thank you for your time and hopefully this would suffice to the completion of the task.
