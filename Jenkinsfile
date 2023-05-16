@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat "kubectl create namespace wp --kubeconfig=\"${KUBECONFIG_PATH}\""
+                        bat "kubectl create namespace wp --kubeconfig=\"${env.KUBECONFIG_PATH}\""
                     } catch (Exception e) {
                         echo "Namespace 'wp' already exists, skipping..."
                     }
@@ -36,8 +36,9 @@ pipeline {
         stage('Deploy WordPress') {
             steps {
                 script {
-                    bat "\"${HELM_PATH}\" repo add bitnami https://charts.bitnami.com/bitnami --kubeconfig=\"${KUBECONFIG_PATH}\""
-                    bat "\"${HELM_PATH}\" install final-project-wp-scalefocus bitnami/wordpress -n wp --kubeconfig=\"${KUBECONFIG_PATH}\" --set wordpressUsername=admin,wordpressPassword=password,wordpressEmail=admin@example.com,persistence.enabled=true,persistence.storageClass=standard,persistence.accessMode=ReadWriteOnce"
+                    bat "\"${env.HELM_PATH}\" repo add bitnami https://charts.bitnami.com/bitnami --kubeconfig=\"${env.KUBECONFIG_PATH}\""
+                    bat "\"${env.HELM_PATH}\" dependency build . --kubeconfig=\"${env.KUBECONFIG_PATH}\""
+                    bat "\"${env.HELM_PATH}\" install final-project-wp-scalefocus bitnami/wordpress -n wp --kubeconfig=\"${env.KUBECONFIG_PATH}\" --set wordpressUsername=admin,wordpressPassword=password,wordpressEmail=admin@example.com,persistence.enabled=true,persistence.storageClass=standard,persistence.accessMode=ReadWriteOnce"
                 }
             }
         }
@@ -46,7 +47,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat "kubectl port-forward svc/final-project-wp-scalefocus 8080:80 --namespace=wp --kubeconfig=\"${KUBECONFIG_PATH}\""
+                        bat "kubectl port-forward svc/final-project-wp-scalefocus 8080:80 --namespace=wp --kubeconfig=\"${env.KUBECONFIG_PATH}\""
                     } catch (Exception e) {
                         error("Failed to start port forwarding.")
                     }
