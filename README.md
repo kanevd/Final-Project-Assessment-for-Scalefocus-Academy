@@ -57,6 +57,61 @@ Requirement for the Project Assessment:
     }
 }
 ```
+- Successful build:
 ![](images/pipelinesucces.PNG)
-
+- The Console Output:
 ![](images/successoutput.PNG)
+
+- To check if WordPress exists, if it doesn’t then it installs the chart, this is the script I used:
+```groovy
+ pipeline {
+    agent any
+
+    stages {
+        stage('Check WordPress') {
+            steps {
+                script {
+                    def wordpressExists
+                    try {
+                        wordpressExists = bat(
+                            script: 'kubectl get deployment final-project-wp-scalefocus --kubeconfig="C:\\ProgramData\\Jenkins\\.jenkins\\kubeconfig.yaml" --namespace wp 2>nul | find /c "final-project-wp-scalefocus"',
+                            returnStdout: true
+                        ).trim().toInteger()
+                    } catch (Exception e) {
+                        wordpressExists = 0
+                    }
+
+                    if (wordpressExists == 0) {
+                        echo "WordPress deployment 'final-project-wp-scalefocus' does not exist. Installing the chart..."
+                        bat 'helm install final-project-wp-scalefocus bitnami/wordpress --kubeconfig="C:\\ProgramData\\Jenkins\\.jenkins\\kubeconfig.yaml" --namespace wp'
+                        echo "WordPress deployment 'final-project-wp-scalefocus' installed."
+                    } else {
+                        echo "WordPress deployment 'final-project-wp-scalefocus' already exists."
+                    }
+                }
+            }
+        }
+    }
+}
+```
+- Which actually failed with an error message pointing that "'helm' is not recognized as an internal or external command, operable program or batch file." Which I was currently unable to fix - the helm path is added in the Environment Variables -> System variables section, everything restarted, still no success. It shows the version however:
+
+![](images/helmversion.PNG)
+
+4. Name the Helm Deployment as: final-project-wp-scalefocus.
+- This is the script I used here:
+```groovy
+ pipeline {
+    agent any
+
+        stage('Helm Deployment') {
+            steps {
+                script {
+                    bat 'helm upgrade final-project-wp-scalefocus bitnami/wordpress --kubeconfig="C:\\ProgramData\\Jenkins\\.jenkins\\kubeconfig.yaml" --namespace wp'
+                    echo "WordPress deployment 'final-project-wp-scalefocus' upgraded."
+                }
+            }
+        }
+    }
+}
+```
