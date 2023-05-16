@@ -1,23 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        GIT_URL = 'https://github.com/kanevd/Final-Project-Assessment-for-Scalefocus-Academy.git'
-        GIT_BRANCH = 'main'
-        HELM_PATH = 'C:\\Users\\dkane\\Downloads\\helm-v3.12.0-windows-amd64\\windows-amd64\\helm.exe'
-        KUBECONFIG_PATH = 'C:\\ProgramData\\Jenkins\\.kube\\config'
-    }
-
     stages {
-        stage('Checkout SCM') {
+        stage('Clone Repository') {
             steps {
-                checkout([$class: 'GitSCM',
-                    branches: [[name: "refs/heads/${GIT_BRANCH}"]],
-                    doGenerateSubmoduleConfigurations: false,
-                    extensions: [],
-                    submoduleCfg: [],
-                    userRemoteConfigs: [[url: "${GIT_URL}"]]
-                ])
+                git 'https://github.com/kanevd/Final-Project-Assessment-for-Scalefocus-Academy.git'
             }
         }
 
@@ -25,8 +12,8 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat "kubectl create namespace wp --kubeconfig=\"${env.KUBECONFIG_PATH}\""
-                    } catch (Exception e) {
+                        bat 'kubectl create namespace wp --kubeconfig="C:\\ProgramData\\Jenkins\\.kube\\config"'
+                    } catch (err) {
                         echo "Namespace 'wp' already exists, skipping..."
                     }
                 }
@@ -36,9 +23,9 @@ pipeline {
         stage('Deploy WordPress') {
             steps {
                 script {
-                    bat "\"${env.HELM_PATH}\" repo add bitnami https://charts.bitnami.com/bitnami --kubeconfig=\"${env.KUBECONFIG_PATH}\""
-                    bat "\"${env.HELM_PATH}\" dependency build . --kubeconfig=\"${env.KUBECONFIG_PATH}\""
-                    bat "\"${env.HELM_PATH}\" install final-project-wp-scalefocus bitnami/wordpress -n wp --kubeconfig=\"${env.KUBECONFIG_PATH}\" --set wordpressUsername=admin,wordpressPassword=password,wordpressEmail=admin@example.com,persistence.enabled=true,persistence.storageClass=standard,persistence.accessMode=ReadWriteOnce"
+                    bat '"C:\\Users\\dkane\\Downloads\\helm-v3.12.0-windows-amd64\\windows-amd64\\helm.exe" repo add bitnami https://charts.bitnami.com/bitnami --kubeconfig="C:\\ProgramData\\Jenkins\\.kube\\config"'
+                    bat '"C:\\Users\\dkane\\Downloads\\helm-v3.12.0-windows-amd64\\windows-amd64\\helm.exe" dependency build . --kubeconfig="C:\\ProgramData\\Jenkins\\.kube\\config"'
+                    bat '"C:\\Users\\dkane\\Downloads\\helm-v3.12.0-windows-amd64\\windows-amd64\\helm.exe" install final-project-wp-scalefocus bitnami/wordpress -n wp --kubeconfig="C:\\ProgramData\\Jenkins\\.kube\\config" --set wordpressUsername=admin,wordpressPassword=password,wordpressEmail=admin@example.com,persistence.enabled=true,persistence.storageClass=standard,persistence.accessMode=ReadWriteOnce'
                 }
             }
         }
@@ -47,9 +34,9 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat "kubectl port-forward svc/final-project-wp-scalefocus 8080:80 --namespace=wp --kubeconfig=\"${env.KUBECONFIG_PATH}\""
-                    } catch (Exception e) {
-                        error("Failed to start port forwarding.")
+                        bat 'kubectl port-forward service/final-project-wp-scalefocus 8080:80 --kubeconfig="C:\\ProgramData\\Jenkins\\.kube\\config"'
+                    } catch (err) {
+                        echo "Failed to start port forwarding: ${err}"
                     }
                 }
             }
