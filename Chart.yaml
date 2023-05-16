@@ -3,3 +3,13 @@ name: wordpress
 description: A Helm chart for deploying WordPress
 version: 0.1.0
 appVersion: 5.8.1
+dependencies:
+  - name: memcached
+    version: 5.2.1
+    repository: https://charts.bitnami.com/bitnami
+  - name: mariadb
+    version: 10.5.12
+    repository: https://charts.bitnami.com/bitnami
+  - name: common
+    version: 1.0.0
+    repository: https://charts.bitnami.com/bitnami
