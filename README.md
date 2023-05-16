@@ -1,6 +1,6 @@
 ### Final-Project-Assessment-for-Scalefocus-Academy
-# Deploy a WordPress on Kubernetes (using Minicube) with Helm and
-automation with Jenkins.
+
+Deploy a WordPress on Kubernetes (using Minicube) with Helm and automation with Jenkins.
 
 ---
 
