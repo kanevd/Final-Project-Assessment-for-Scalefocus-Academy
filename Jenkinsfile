@@ -14,7 +14,7 @@ pipeline {
               echo "Namespace wp already exists"
             } else {
               echo "Creating namespace wp"
-              bat 'kubectl create namespace wp'
+              bat 'kubectl apply -f - <<EOF\ncapi:\n  version: v1alpha4\n  kind: Namespace\n  metadata:\n    name: wp\nEOF'
             }
           } catch (Exception e) {
             echo "Error checking/creating namespace wp: ${e.getMessage()}"
