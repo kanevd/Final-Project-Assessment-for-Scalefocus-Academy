@@ -2,7 +2,7 @@ pipeline {
    agent any
 
    environment {
-      KUBECONFIG = 'C:\ProgramData\Jenkins\.jenkins\workspace\NamespaceWordPress'
+      KUBECONFIG = 'C:/ProgramData/Jenkins/.jenkins/workspace/NamespaceWordPress'
    }
 
    stages {
