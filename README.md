@@ -116,4 +116,18 @@ Requirement for the Project Assessment:
 }
 ```
 5. Deploy the helm chart using the Jenkins pipeline.
-6. Load the home page of the WordPress to see the final result. 
+- For this step, I decided to try with a Jenkins file, which is still available in the repository. With the current script inside, the builds are always successful, but the deployment does not work as per the requirements.
+- Dashboard -> Select the Pipeline -> Configure -> Scroll down to Pipeline -> Select Pipeline script from SCM input the information:
+
+![](images/pipelinefromSCM.PNG)
+
+- The build process:
+
+![](images/buildssuccess.PNG)
+
+- The console output:
+
+![](images/endofprocess.PNG)
+
+6. Load the home page of the WordPress to see the final result.
+- The final result would be similar to the sample login page from above.
