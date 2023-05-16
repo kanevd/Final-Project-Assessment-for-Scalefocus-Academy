@@ -1,7 +1,5 @@
 pipeline {
   agent any
-
-  stages {
     stage('Namespace Check') {
       steps {
         script {
